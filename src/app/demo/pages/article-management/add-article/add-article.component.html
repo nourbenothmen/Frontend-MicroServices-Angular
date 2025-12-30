@@ -1,0 +1,75 @@
+<div class="modal-header">
+  <h4 class="modal-title">Ajouter Article</h4>
+  <button type="button" class="btn-close" (click)="router.navigate(['/GestionArticles'])"></button>
+</div>
+
+<div class="modal-body">
+  <form (ngSubmit)="submit()" #articleForm="ngForm">
+
+    <div class="mb-3">
+      <label class="form-label">Nom</label>
+      <input type="text" class="form-control" [(ngModel)]="article.nom" name="nom" required />
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Référence</label>
+      <input type="text" class="form-control" [(ngModel)]="article.reference" name="reference" required />
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Description</label>
+      <textarea class="form-control" [(ngModel)]="article.description" name="description"></textarea>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Catégorie</label>
+      <input type="text" class="form-control" [(ngModel)]="article.categorie" name="categorie" required />
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Type</label>
+      <input type="text" class="form-control" [(ngModel)]="article.type" name="type" />
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Marque</label>
+      <input type="text" class="form-control" [(ngModel)]="article.marque" name="marque" />
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Modèle</label>
+      <input type="text" class="form-control" [(ngModel)]="article.modele" name="modele" />
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Prix</label>
+      <input type="number" class="form-control" [(ngModel)]="article.prix" name="prix" required />
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Durée de garantie (mois)</label>
+      <input type="number" class="form-control" [(ngModel)]="article.dureeGarantie" name="dureeGarantie" required />
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Stock</label>
+      <input type="number" class="form-control" [(ngModel)]="article.stock" name="stock" required />
+    </div>
+
+    <div class="mb-3 form-check">
+      <input type="checkbox" class="form-check-input" [(ngModel)]="article.estDisponible" name="estDisponible" />
+      <label class="form-check-label">Disponible</label>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">URL de l'image</label>
+      <input type="text" class="form-control" [(ngModel)]="article.imageUrl" name="imageUrl" />
+    </div>
+
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" (click)="router.navigate(['/GestionArticles'])">Annuler</button>
+      <button type="submit" class="btn btn-success" [disabled]="articleForm.invalid">Ajouter</button>
+    </div>
+
+  </form>
+</div>

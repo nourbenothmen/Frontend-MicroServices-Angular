@@ -3,6 +3,7 @@ import { AuthService } from '../AuthService';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-register',
@@ -12,44 +13,54 @@ import { FormsModule } from '@angular/forms';
   imports: [CommonModule, FormsModule]
 })
 export class RegisterComponent {
+
   user = {
+    firstName: '',
+    lastName: '',
     username: '',
-    password: '',
-    roles: [] as { roleName: string }[]
+    email: '',
+    password: ''
   };
-  selectedRole: string = '';
 
-  constructor(private auth: AuthService, private router: Router) {}
+  errorMessage = '';
+  successMessage = '';
 
-  // Met à jour le rôle choisi
-  updateRoles() {
-    this.user.roles = this.selectedRole ? [{ roleName: this.selectedRole }] : [];
-    console.log('Rôles mis à jour :', this.user.roles);
-  }
+  constructor(
+    private auth: AuthService,
+    private router: Router,
+    private http: HttpClient
+  ) {}
 
-  // Inscription
   onRegister() {
-    const minimalUser = { 
-      username: this.user.username, 
-      password: this.user.password, 
-      roles: this.user.roles 
-    };
+    // Réinitialiser les messages
+    this.errorMessage = '';
+    this.successMessage = '';
 
-    if (!minimalUser.username || !minimalUser.password || !minimalUser.roles.length) {
-      alert('Veuillez remplir tous les champs et choisir un rôle.');
+    // Vérification simple des champs
+    if (Object.values(this.user).some(v => !v)) {
+      this.errorMessage = 'Veuillez remplir tous les champs.';
       return;
     }
 
-    console.log('Données envoyées au register :', minimalUser);
+    if (this.user.password.length < 6) {
+      this.errorMessage = 'Le mot de passe doit contenir au moins 6 caractères.';
+      return;
+    }
 
-    this.auth.register(minimalUser).subscribe({
-      next: () => {
-        alert('Inscription réussie');
-        this.router.navigate(['/login']);
+    console.log('Envoi inscription :', this.user);
+
+    this.auth.register(this.user).subscribe({
+      next: (res: any) => {
+        console.log('Inscription OK', res);
+        this.successMessage = 'Inscription réussie. Redirection vers la connexion...';
+        setTimeout(() => this.router.navigate(['/login']), 1000);
       },
       error: (err) => {
-        console.error('Erreur inscription:', err);
-        alert('Erreur lors de l’inscription : ' + (err.error?.message || err.message));
+        console.error('Erreur inscription', err);
+        // Regrouper tous les messages d'erreur
+        this.errorMessage = err.error?.errors
+          ? Object.values(err.error.errors).flat().join(' ')
+          : err.error?.message || 'Erreur lors de l\'inscription. Vérifiez votre mot de passe.';
       }
     });
   }

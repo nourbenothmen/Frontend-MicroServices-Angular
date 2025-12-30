@@ -4,6 +4,9 @@ import { animate, style, transition, trigger } from '@angular/animations';
 
 // bootstrap import
 import { NgbDropdownConfig } from '@ng-bootstrap/ng-bootstrap';
+import { AuthService } from '../../../../../demo/pages/authentication/AuthService'; // ajuste le chemin si nécessaire
+import { Router } from '@angular/router';
+
 
 // project import
 import { SharedModule } from 'src/app/theme/shared/shared.module';
@@ -34,7 +37,7 @@ export class NavRightComponent {
   friendId!: number;
 
   // constructor
-  constructor() {
+  constructor(private authService: AuthService, private router: Router) {
     this.visibleUserList = false;
     this.chatMessage = false;
   }
@@ -44,5 +47,10 @@ export class NavRightComponent {
   onChatToggle(friendID: any) {
     this.friendId = friendID;
     this.chatMessage = !this.chatMessage;
+  }
+
+  logout() {
+    this.authService.logout();  // appelle la méthode du service
+    this.router.navigate(['/login']); // redirige vers la page de login après déconnexion
   }
 }

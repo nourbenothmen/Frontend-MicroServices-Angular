@@ -1,0 +1,46 @@
+<div class="cards-container">
+  <div class="card stat-card active">
+    <h3>{{ stats.actives }}</h3>
+    <p>Réclamations actives</p>
+  </div>
+
+  <div class="card stat-card pending">
+    <h3>{{ stats.enAttente }}</h3>
+    <p>Réclamations en attente</p>
+  </div>
+
+  <div class="card stat-card done">
+    <h3>{{ stats.termineesCeMois }}</h3>
+    <p>Terminées ce mois</p>
+  </div>
+</div>
+
+<div class="table-container" *ngIf="!loading">
+  <h4>📅 Interventions du jour</h4>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Heure</th>
+        <th>Technicien</th>
+        <th>Client</th>
+        <th>Adresse</th>
+        <th>Statut</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr *ngFor="let i of interventionsDuJour">
+        <td>{{ i.heure }}</td>
+        <td>{{ i.technicien }}</td>
+        <td>{{ i.client }}</td>
+        <td>{{ i.adresse }}</td>
+        <td>{{ i.statut }}</td>
+        <td>
+          <button (click)="voirDetails(i)">👁️</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

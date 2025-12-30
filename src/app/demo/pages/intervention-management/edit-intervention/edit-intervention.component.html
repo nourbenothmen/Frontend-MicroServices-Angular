@@ -1,0 +1,20 @@
+<div class="card">
+  <div class="card-header">
+    <h4>Affectation Intervention</h4>
+  </div>
+
+  <div class="card-body">
+    <form (ngSubmit)="save()">
+      <input class="form-control mb-2" [(ngModel)]="intervention.technicien" name="technicien" placeholder="Technicien">
+
+      <select class="form-control mb-2" [(ngModel)]="intervention.statut" name="statut">
+        <option>Nouvelle</option>
+        <option>En cours</option>
+        <option>Terminée</option>
+        <option>Annulée</option>
+      </select>
+
+      <button class="btn btn-primary">Enregistrer</button>
+    </form>
+  </div>
+</div>

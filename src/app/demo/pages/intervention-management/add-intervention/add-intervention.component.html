@@ -1,0 +1,76 @@
+<!-- 🔹 CARTE INFOS RÉCLAMATION (READONLY) -->
+<div class="card mb-4 border-info">
+  <div class="card-header bg-info text-white">
+    📄 Informations Réclamation
+  </div>
+
+  <div class="card-body">
+    <p><strong>Client :</strong> {{ reclamation?.customerNom }}</p>
+    <p><strong>Article :</strong> {{ intervention.articleNom }}</p>
+
+    <p>
+      <strong>Garantie :</strong>
+      <span class="badge"
+            [ngClass]="intervention.estSousGarantie ? 'bg-success' : 'bg-danger'">
+        {{ intervention.estSousGarantie ? 'Sous garantie' : 'Hors garantie' }}
+      </span>
+    </p>
+
+    <p>
+      <strong>Date souhaitée :</strong>
+      {{ intervention.desiredInterventionDate | date:'dd/MM/yyyy HH:mm' }}
+    </p>
+  </div>
+</div>
+
+<!-- 🔹 CARTE PLANIFICATION -->
+<div class="card shadow-sm border-0 rounded-3">
+  <div class="card-header bg-primary text-white">
+    🛠️ Planifier l’intervention
+  </div>
+
+  <div class="card-body bg-light p-4">
+    <form (ngSubmit)="save()">
+
+      <!-- 🔹 Technicien -->
+<select
+  class="form-select mb-3"
+  [(ngModel)]="intervention.technicienId"
+  name="technicien"
+  required>
+  <option value="" disabled selected>👨‍🔧 Choisir un technicien</option>
+  <option *ngFor="let tech of techniciens" [ngValue]="tech.id">
+  {{ tech.prenom }} {{ tech.nom }} — {{ tech.specialite }}
+</option>
+
+</select>
+
+
+    <input type="datetime-local"
+       class="form-control mb-3"
+       [(ngModel)]="intervention.dateIntervention"
+       name="dateIntervention"
+       required>
+
+
+    <textarea
+  class="form-control mb-3"
+  placeholder="📝 Description"
+  [(ngModel)]="intervention.description"
+  name="description"></textarea>
+
+
+      <textarea
+        class="form-control mb-3"
+        placeholder="💬 Commentaire"
+        [(ngModel)]="intervention.commentaire"
+        name="commentaire">
+      </textarea>
+
+      <button type="submit" class="btn btn-success fw-bold">
+        ✅ Créer l’intervention
+      </button>
+
+    </form>
+  </div>
+</div>

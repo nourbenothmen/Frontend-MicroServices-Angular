@@ -1,0 +1,130 @@
+<div class="card shadow-sm border-0">
+  <div class="card-header bg-primary text-white d-flex align-items-center">
+    <i class="fas fa-plus-circle me-2"></i>
+    <h4 class="mb-0">Nouvelle réclamation</h4>
+  </div>
+
+  <div class="card-body p-4">
+    <form (ngSubmit)="onSave()" #reclamationForm="ngForm">
+
+      <!-- Article concerné -->
+      <div class="mb-4 position-relative">
+        <label for="article" class="form-label fw-bold text-primary">
+          <i class="fas fa-tools me-2"></i>Article concerné <span class="text-danger">*</span>
+        </label>
+        <select
+          id="article"
+          class="form-select form-select-lg shadow-sm"
+          [(ngModel)]="selectedArticleId"
+          name="selectedArticleId"
+          required
+          #articleSelect="ngModel"
+        >
+          <option [ngValue]="null" disabled>Choisissez un article</option>
+          <option *ngFor="let article of articles" [ngValue]="article.articleId">
+            {{ article.displayName }}
+            <span class="text-muted small ms-2" *ngIf="article.serialNumber">
+              (S/N: {{ article.serialNumber }})
+            </span>
+            <span class="badge bg-success ms-2" *ngIf="article.estSousGarantie">Sous garantie</span>
+            <span class="badge bg-warning text-dark ms-2" *ngIf="!article.estSousGarantie">Hors garantie</span>
+          </option>
+        </select>
+
+        <div *ngIf="articles.length === 0" class="alert alert-info mt-3 small py-2">
+          <i class="fas fa-info-circle me-2"></i>
+          Aucun article enregistré dans votre compte. Contactez le service client pour ajouter vos équipements.
+        </div>
+
+        <div *ngIf="articleSelect.invalid && (articleSelect.dirty || articleSelect.touched)" class="text-danger small mt-1">
+          <i class="fas fa-exclamation-triangle me-1"></i> Veuillez sélectionner un article.
+        </div>
+      </div>
+
+      <!-- Type de problème -->
+      <div class="mb-4">
+        <label for="problemType" class="form-label fw-bold text-primary">
+          <i class="fas fa-exclamation-circle me-2"></i>Type de problème
+        </label>
+        <select
+          id="problemType"
+          class="form-select form-select-lg shadow-sm"
+          [(ngModel)]="reclamation.problemType"
+          name="problemType"
+        >
+          <option [ngValue]="''">Sélectionnez un type (facultatif)</option>
+          <option *ngFor="let type of problemTypes" [ngValue]="type">
+            {{ type }}
+          </option>
+        </select>
+        <div class="form-text text-muted small">
+          <i class="fas fa-lightbulb me-1"></i> Choisir un type aide le technicien à mieux préparer l'intervention.
+        </div>
+      </div>
+
+      <!-- Description détaillée -->
+      <div class="mb-4">
+        <label for="description" class="form-label fw-bold text-primary">
+          <i class="fas fa-edit me-2"></i>Description détaillée <span class="text-danger">*</span>
+        </label>
+        <textarea
+          id="description"
+          class="form-control shadow-sm"
+          rows="6"
+          [(ngModel)]="reclamation.description"
+          name="description"
+          placeholder="Exemple : Depuis 3 jours, la chaudière ne chauffe plus. Le voyant rouge clignote et j'entends un bruit de clic répétitif..."
+          required
+          #descriptionInput="ngModel"
+        ></textarea>
+
+        <div *ngIf="descriptionInput.invalid && (descriptionInput.dirty || descriptionInput.touched)" class="text-danger small mt-1">
+          <i class="fas fa-exclamation-triangle me-1"></i> La description est obligatoire.
+        </div>
+
+        <div class="form-text text-muted small mt-2">
+          <i class="fas fa-info-circle me-1"></i>
+          Plus votre description est précise, plus l'intervention sera rapide et efficace.
+        </div>
+      </div>
+
+      <!-- Date souhaitée -->
+      <div class="mb-5">
+        <label for="desiredDate" class="form-label fw-bold text-primary">
+          <i class="fas fa-calendar-alt me-2"></i>Date souhaitée pour l'intervention
+        </label>
+        <input
+          type="date"
+          id="desiredDate"
+          class="form-control form-control-lg shadow-sm"
+          [(ngModel)]="reclamation.desiredInterventionDate"
+          name="desiredInterventionDate"
+          [min]="today"
+        />
+        <div class="form-text text-muted small">
+          <i class="fas fa-clock me-1"></i>
+          Nous ferons notre possible pour respecter votre préférence (sous réserve de disponibilité).
+        </div>
+      </div>
+
+      <!-- Boutons -->
+      <div class="d-flex gap-3 justify-content-end">
+        <button
+          type="button"
+          class="btn btn-outline-secondary btn-lg px-4"
+          (click)="onCancel()"
+        >
+          <i class="fas fa-times me-2"></i>Annuler
+        </button>
+        <button
+          type="submit"
+          class="btn btn-primary btn-lg px-5 shadow"
+          [disabled]="!selectedArticleId || !reclamation.description.trim() || reclamationForm.invalid"
+        >
+          <i class="fas fa-paper-plane me-2"></i>Soumettre la réclamation
+        </button>
+      </div>
+
+    </form>
+  </div>
+</div>

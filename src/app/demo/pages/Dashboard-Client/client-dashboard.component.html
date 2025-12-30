@@ -1,0 +1,56 @@
+<div class="dashboard">
+
+  <!-- Cards -->
+<div class="cards">
+  <div class="card card-total">
+    <h3>📋 Réclamations totales</h3>
+    <p>{{ stats.totalReclamations }}</p>
+  </div>
+
+  <div class="card card-encours">
+    <h3>⏳ Réclamations en cours</h3>
+    <p>{{ stats.enCours }}</p>
+  </div>
+
+  <div class="card card-terminees">
+    <h3>✅ Réclamations terminées</h3>
+    <p>{{ stats.terminees }}</p>
+  </div>
+
+  <div class="card card-articles">
+    <h3>📦 Articles enregistrés</h3>
+    <p>{{ stats.articles }}</p>
+  </div>
+</div>
+
+  <!-- Réclamations récentes -->
+  <div class="recent-reclamations">
+    <h2>📋 Réclamations récentes</h2>
+    <div *ngIf="loadingReclamations">Chargement...</div>
+    <div *ngIf="!loadingReclamations && recentReclamations.length === 0">Aucune réclamation récente</div>
+    <ul *ngIf="recentReclamations.length > 0">
+      <li *ngFor="let r of recentReclamations">
+        <h4>{{ r.subject }} (REC-{{ r.id | number:'3.0' }})</h4>
+        <p>
+  Status :
+  <span class="badge" [ngClass]="getStatusClass(r.status)">
+    {{ getStatusLabel(r.status) }}
+  </span>
+</p>
+
+        <p>Date: {{ r.createdAt | date:'dd/MM/yyyy' }}</p>
+        <p>Technicien: {{ r.technicienName || '—' }}</p>
+        <p>
+  Garantie :
+  <span
+    class="badge"
+    [ngClass]="r.estSousGarantie ? 'badge-success' : 'badge-danger'">
+    {{ r.estSousGarantie ? 'Sous garantie' : 'Hors garantie' }}
+  </span>
+</p>
+
+      </li>
+    </ul>
+  </div>
+
+</div>

@@ -1,0 +1,194 @@
+<div class="container py-4">
+
+  <!-- Titre différent selon le mode -->
+  <h2 class="text-center text-primary mb-4" *ngIf="mode === 'impression'">
+    📄 Facture de l'Intervention INT-{{ intervention.Id | number:'3.0-0':'' }}
+  </h2>
+  <h3 class="mb-4" *ngIf="mode === 'edition'">
+    Clôturer et Facturer l'Intervention #{{ intervention.Id }}
+  </h3>
+
+  <!-- Alerte Hors Garantie (seulement en édition) -->
+  <div class="alert alert-warning d-flex align-items-center" *ngIf="mode === 'edition' && !intervention.EstSousGarantie">
+    <span class="me-2">⚠️</span>
+    <div>
+      <strong>Intervention Hors Garantie</strong><br>
+      Cette intervention est payante. Veuillez établir la facture incluant les pièces et la main d'œuvre.
+    </div>
+  </div>
+
+  <!-- Informations Client -->
+  <div class="card mb-4">
+    <div class="card-header bg-primary text-white">
+      Informations Client
+    </div>
+    <div class="card-body">
+      <div class="row">
+        <div class="col-md-6">
+          <p><strong>Client:</strong> {{ intervention.ClientNom }}</p>
+          <p><strong>Technicien:</strong> {{ intervention.TechnicienNom }}</p>
+        </div>
+        <div class="col-md-6">
+          <p><strong>Article:</strong> {{ intervention.ArticleNom }}</p>
+          <p><strong>Date intervention:</strong> {{ intervention.DateIntervention | date:'short' }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Rapport d'Intervention -->
+  <div class="card mb-4">
+    <div class="card-header bg-primary text-white">
+      Rapport d'Intervention
+    </div>
+    <div class="card-body">
+      <!-- Édition : textarea modifiable -->
+      <textarea *ngIf="mode === 'edition'" class="form-control" rows="4" [(ngModel)]="intervention.Description"
+                placeholder="Remplacement du thermostat défectueux et nettoyage du système..."></textarea>
+      
+      <!-- Impression : affichage simple -->
+      <div *ngIf="mode === 'impression'" class="p-3 bg-light rounded">
+        <p class="mb-0">{{ intervention.Description || 'Aucun rapport saisi.' }}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Détails de la Facturation -->
+  <div class="card mb-4">
+    <div class="card-header bg-primary text-white">
+      Détails de la Facturation
+    </div>
+    <div class="card-body">
+
+      <!-- Pièces et Matériel -->
+      <h5 class="d-flex justify-content-between align-items-center">
+        Pièces et Matériel
+        <button *ngIf="mode === 'edition'" class="btn btn-primary btn-sm" (click)="addPart()">
+          + Ajouter une pièce
+        </button>
+      </h5>
+
+      <table class="table table-bordered mt-3">
+        <thead class="table-light">
+          <tr>
+            <th>Désignation</th>
+            <th>Quantité</th>
+            <th>Prix unitaire (TND)</th>
+            <th *ngIf="mode === 'edition'">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Liste des pièces existantes -->
+          <tr *ngFor="let part of intervention.Pieces">
+            <td>{{ part.NomPiece }}</td>
+            <td>{{ part.Quantite }}</td>
+            <td>{{ part.PrixUnitaire | number:'1.2-2' }}</td>
+            <td *ngIf="mode === 'edition'">
+              <button class="btn btn-danger btn-sm" (click)="deletePart(part.Id)">Supprimer</button>
+            </td>
+          </tr>
+
+          <!-- Ligne d'ajout (seulement en édition) -->
+          <tr *ngIf="mode === 'edition'">
+            <td><input class="form-control" [(ngModel)]="newPart.NomPiece" placeholder="Thermostat électronique"></td>
+            <td><input class="form-control" type="number" [(ngModel)]="newPart.Quantite" min="1" [value]="1"></td>
+            <td><input class="form-control" type="number" [(ngModel)]="newPart.PrixUnitaire" min="0" step="0.01"></td>
+            <td><button class="btn btn-success btn-sm" (click)="addPart()">Ajouter</button></td>
+          </tr>
+
+          <!-- Message si aucune pièce (en impression) -->
+          <tr *ngIf="intervention.Pieces.length === 0 && mode === 'impression'">
+            <td colspan="3" class="text-center text-muted">Aucune pièce facturée</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- Durée, Tarif, Déplacement -->
+      <div class="row mt-4" *ngIf="mode === 'edition'">
+        <div class="col-md-4">
+          <label class="form-label"><strong>Durée intervention (heures)</strong></label>
+          <input class="form-control" type="number" [(ngModel)]="intervention.DureeIntervention" (input)="calculateTotals()" min="0">
+        </div>
+        <div class="col-md-4">
+          <label class="form-label"><strong>Tarif horaire (TND)</strong></label>
+          <input class="form-control" type="number" [(ngModel)]="intervention.TarifHoraire" (input)="calculateTotals()" min="0">
+        </div>
+        <div class="col-md-4">
+          <label class="form-label"><strong>Déplacement (TND)</strong></label>
+          <input class="form-control" type="number" [(ngModel)]="intervention.MontantDeplacement" (input)="calculateTotals()" min="0">
+        </div>
+      </div>
+
+      <!-- Affichage en lecture seule pour impression -->
+      <div class="row mt-4" *ngIf="mode === 'impression'">
+        <div class="col-md-4">
+          <strong>Durée intervention:</strong> {{ intervention.DureeIntervention }} heures
+        </div>
+        <div class="col-md-4">
+          <strong>Tarif horaire:</strong> {{ intervention.TarifHoraire | number:'1.2-2' }} TND
+        </div>
+        <div class="col-md-4">
+          <strong>Déplacement:</strong> {{ intervention.MontantDeplacement | number:'1.2-2' }} TND
+        </div>
+      </div>
+
+      <!-- Totaux -->
+      <div class="mt-4 p-4 bg-light rounded border">
+        <p><strong>Sous-total pièces:</strong> {{ sousTotalPieces | number:'1.2-2' }} TND</p>
+        <p><strong>Main d'œuvre ({{ intervention.DureeIntervention }}h × {{ intervention.TarifHoraire }} TND):</strong> 
+           {{ montantMainOeuvre | number:'1.2-2' }} TND</p>
+        <p><strong>Déplacement:</strong> {{ intervention.MontantDeplacement | number:'1.2-2' }} TND</p>
+        <p><strong>TVA ({{ (intervention.TauxTVA * 100) | number:'1.0-0' }}%):</strong> {{ tvaAmount | number:'1.2-2' }} TND</p>
+        <hr>
+        <p class="fs-4 fw-bold text-primary">
+          Total TTC: {{ totalTTC | number:'1.2-2' }} TND
+        </p>
+      </div>
+
+      <!-- Mode et statut de paiement -->
+      <div class="row mt-4">
+        <div class="col-md-6">
+          <label class="form-label"><strong>Mode de paiement</strong></label>
+          <select *ngIf="mode === 'edition'" class="form-select" [(ngModel)]="intervention.ModePaiement">
+            <option>Espèces</option>
+            <option>Carte</option>
+            <option>Chèque</option>
+            <option>Virement</option>
+          </select>
+          <p *ngIf="mode === 'impression'" class="form-control-static fw-bold">{{ intervention.ModePaiement }}</p>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label"><strong>Statut du paiement</strong></label>
+          <select *ngIf="mode === 'edition'" class="form-select" [(ngModel)]="intervention.StatutPaiement">
+            <option>Payé</option>
+            <option>En attente</option>
+            <option>Partiellement payé</option>
+          </select>
+          <p *ngIf="mode === 'impression'" class="form-control-static fw-bold">{{ intervention.StatutPaiement }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Boutons d'action -->
+  <div class="d-flex justify-content-end gap-3 mt-4">
+    <!-- Mode Édition -->
+    <button *ngIf="mode === 'edition'" class="btn btn-secondary" (click)="router.navigate(['/interventions'])">
+      Annuler
+    </button>
+    <button *ngIf="mode === 'edition'" class="btn btn-success btn-lg" (click)="submitAndGeneratePdf()">
+      Clôturer et Générer la Facture
+    </button>
+
+    <!-- Mode Impression -->
+  <!-- Bouton Imprimer (seulement en mode impression) -->
+<div class="d-flex justify-content-end gap-3 mt-4">
+<button *ngIf="mode === 'impression'" class="btn btn-primary btn-lg" (click)="genererFacturePdf()">
+  📄 Télécharger la Facture (PDF)
+</button>
+  <button *ngIf="mode === 'impression'" class="btn btn-outline-secondary" (click)="router.navigate(['/interventions'])">
+    ← Retour à la liste
+  </button>
+</div>
+  </div>
+</div>

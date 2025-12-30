@@ -1,0 +1,18 @@
+<div class="card" *ngIf="intervention">
+  <div class="card-header">
+    <h4>Détails Intervention #{{ intervention.id }}</h4>
+  </div>
+
+  <div class="card-body">
+    <p><b>Client :</b> {{ intervention.clientName }}</p>
+    <p><b>Article :</b> {{ intervention.articleName }}</p>
+    <p><b>Description :</b> {{ intervention.description }}</p>
+    <p><b>Technicien :</b> {{ intervention.technicien || 'Non affecté' }}</p>
+    <p><b>Statut :</b> {{ intervention.statut }}</p>
+    <p><b>Priorité :</b> {{ intervention.priorite }}</p>
+  </div>
+
+  <div class="card-footer">
+    <button class="btn btn-secondary" routerLink="/interventions">Retour</button>
+  </div>
+</div>

@@ -1,0 +1,39 @@
+.card {
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.card-header {
+  background: linear-gradient(135deg, #5e72e4, #4a5cc9) !important;
+  padding: 1.2rem 1.5rem;
+}
+
+.form-select-lg,
+.form-control-lg {
+  border-radius: 10px;
+  padding: 0.75rem 1rem;
+  font-size: 1.1rem;
+}
+
+.form-select:focus,
+.form-control:focus,
+textarea:focus {
+  border-color: #5e72e4;
+  box-shadow: 0 0 0 0.25rem rgba(94, 114, 228, 0.25);
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #5e72e4, #4a5cc9);
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 15px rgba(94, 114, 228, 0.3);
+}
+
+.badge {
+  font-size: 0.75rem;
+}

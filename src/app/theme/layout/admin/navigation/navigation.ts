@@ -16,24 +16,35 @@ export interface NavigationItem {
     type?: string;
   };
   children?: NavigationItem[];
+  roles?: string[]; // 👈 AJOUT IMPORTANT
 }
 
 export const NavigationItems: NavigationItem[] = [
   {
-    id: 'navigation',
-    title: 'Navigation',
-    type: 'group',
-    icon: 'icon-group',
-    children: [
-      {
-        id: 'dashboard',
-        title: 'Dashboard',
-        type: 'item',
-        url: '/analytics',
-        icon: 'feather icon-home'
-      }
-    ]
-  },
+  id: 'navigation',
+  title: 'Navigation',
+  type: 'group',
+  icon: 'icon-group',
+  children: [
+    {
+      id: 'dashboard-admin',
+      title: 'Tableau de bord',
+      type: 'item',
+      url: '/analytics',         // Dashboard ResponsableSAV
+      icon: 'feather icon-home',
+      roles: ['ResponsableSAV']
+    },
+    {
+      id: 'dashboard-client',
+      title: 'Tableau de bord',
+      type: 'item',
+      url: '/client-dashboard',  // Dashboard Client
+      icon: 'feather icon-home',
+      roles: ['Client']
+    }
+  ]
+},
+  /*
   {
     id: 'ui-component',
     title: 'Ui Component',
@@ -85,33 +96,9 @@ export const NavigationItems: NavigationItem[] = [
         ]
       }
     ]
-  },
-  {
-    id: 'Authentication',
-    title: 'Authentication',
-    type: 'group',
-    icon: 'icon-group',
-    children: [
-      {
-        id: 'signup',
-        title: 'Sign up',
-        type: 'item',
-        url: '/register',
-        icon: 'feather icon-at-sign',
-        target: true,
-        breadcrumbs: false
-      },
-      {
-        id: 'signin',
-        title: 'Sign in',
-        type: 'item',
-        url: '/login',
-        icon: 'feather icon-log-in',
-        target: true,
-        breadcrumbs: false
-      }
-    ]
-  },
+  },*/
+
+  /*
   {
     id: 'chart',
     title: 'Chart',
@@ -127,31 +114,119 @@ export const NavigationItems: NavigationItem[] = [
         icon: 'feather icon-pie-chart'
       }
     ]
-  },
+  },*/
   {
     id: 'forms & tables',
-    title: 'Forms & Tables',
+    title: 'Gestion',
     type: 'group',
     icon: 'icon-group',
     children: [
       {
-        id: 'forms',
-        title: 'Basic Forms',
+        id: 'tables',
+        title: 'clients',
         type: 'item',
-        url: '/forms',
+        url: '/GestionClients',
         classes: 'nav-item',
-        icon: 'feather icon-file-text'
+        icon: 'feather icon-user',
+        roles: ['ResponsableSAV']
+      },
+        {
+        id: 'tables',
+        title: 'réclamations',
+        type: 'item',
+        url: '/GestionReclamations',
+        classes: 'nav-item',
+        icon: 'feather icon-server',
+        roles: ['ResponsableSAV']
+      },
+        {
+        id: 'tables',
+        title: 'articles',
+        type: 'item',
+        url: '/GestionArticles',
+        classes: 'nav-item',
+        icon: 'feather icon-server',
+        roles: ['ResponsableSAV']
       },
       {
         id: 'tables',
-        title: 'Tables',
+        title: 'techniciens',
         type: 'item',
-        url: '/tables',
+        url: '/techniciens',
         classes: 'nav-item',
-        icon: 'feather icon-server'
+        icon: 'feather icon-server',
+        roles: ['ResponsableSAV']
+      },
+        {
+        id: 'tables',
+        title: 'interventions',
+        type: 'item',
+        url: '/interventions',
+        classes: 'nav-item',
+        icon: 'feather icon-server',
+        roles: ['ResponsableSAV']
+      }
+      ,
+        {
+        id: 'tables',
+        title: 'Mes réclamations',
+        type: 'item',
+        url: '/MesReclamations',
+        classes: 'nav-item',
+        icon: 'feather icon-server',
+         roles: ['Client']
+      }
+       ,
+        {
+        id: 'tables',
+        title: 'Nouvelle réclamation',
+        type: 'item',
+        url: '/AddReclamation',
+        classes: 'nav-item',
+        icon: 'feather icon-server',
+        roles: ['Client']
+      }
+      ,
+        {
+        id: 'tables',
+        title: 'mes articles',
+        type: 'item',
+        url: '/MesArticles',
+        classes: 'nav-item',
+        icon: 'feather icon-server',
+        roles: ['Client']
       }
     ]
   },
+    {
+    id: 'Authentication',
+    title: 'Authentication',
+    type: 'group',
+    icon: 'icon-group',
+    children: [
+      {
+        id: 'signup',
+        title: 'Inscription',
+        type: 'item',
+        url: '/register',
+        icon: 'feather icon-at-sign',
+        target: true,
+        breadcrumbs: false
+      },
+      {
+        id: 'signin',
+        title: 'Connexion',
+        type: 'item',
+        url: '/login',
+        icon: 'feather icon-log-in',
+        target: true,
+        breadcrumbs: false
+      }
+    ]
+  },
+  
+  
+  /*
   {
     id: 'other',
     title: 'Other',
@@ -203,5 +278,5 @@ export const NavigationItems: NavigationItem[] = [
         ]
       }
     ]
-  }
+  }*/
 ];

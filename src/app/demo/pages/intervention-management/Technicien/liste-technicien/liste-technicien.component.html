@@ -1,0 +1,45 @@
+<div class="container mt-4">
+  <h2 class="mb-4">Liste des Techniciens</h2>
+<table class="table table-bordered table-striped">
+  <thead class="table-primary">
+    <tr>
+      <th>ID</th>
+      <th>Nom</th>
+      <th>Prénom</th>
+      <th>Téléphone</th>
+      <th>Spécialité</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let technicien of techniciens">
+      <td>{{ technicien.Id }}</td>
+      <td>{{ technicien.Nom }}</td>
+      <td>{{ technicien.Prenom }}</td>
+      <td>{{ technicien.Telephone }}</td>
+      <td>{{ technicien.Specialite }}</td>
+      <td>
+        <button class="btn btn-sm btn-info me-1"
+                (click)="viewTechnicien(technicien.Id)">
+          👁️
+        </button>
+
+        <button class="btn btn-sm btn-warning me-1"
+                (click)="editTechnicien(technicien.Id)">
+          ✏️
+        </button>
+
+        <button class="btn btn-sm btn-danger"
+                (click)="deleteTechnicien(technicien.Id)">
+          🗑️
+        </button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+
+  <button class="btn btn-primary mt-3" routerLink="/techniciens/add">
+    Ajouter un Technicien
+  </button>
+</div>

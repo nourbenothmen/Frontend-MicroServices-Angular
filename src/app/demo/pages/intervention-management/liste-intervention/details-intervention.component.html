@@ -1,0 +1,54 @@
+<div class="container py-3" *ngIf="intervention">
+  <h3 class="mb-3">🛠️ Détails Intervention #{{ intervention.Id }}</h3>
+
+  <!-- Informations Réclamation -->
+  <div class="card mb-3">
+    <div class="card-header bg-primary text-white">Informations Réclamation</div>
+    <div class="card-body">
+      <p><strong>ID Réclamation:</strong> {{ intervention.ReclamationId }}</p>
+      <p><strong>Description:</strong> {{ intervention.Description || '-' }}</p>
+      <p><strong>Date de création:</strong> {{ intervention.DateCreation | date:'short' }}</p>
+    </div>
+  </div>
+
+  <!-- Informations Client -->
+  <div class="card mb-3">
+    <div class="card-header bg-primary text-white">Informations Client</div>
+    <div class="card-body">
+      <p><strong>Nom:</strong> {{ intervention.ClientNom }}</p>
+      <p><strong>Addresse:</strong> {{ intervention.ClientAddress }}</p>
+      <p><strong>Téléphone:</strong> {{ intervention.ClientTelephone }}</p>
+    </div>
+  </div>
+
+  <!-- Informations Article -->
+  <div class="card mb-3">
+    <div class="card-header bg-primary text-white">Informations Article</div>
+    <div class="card-body">
+      <p><strong>Nom:</strong> {{ intervention.ArticleNom }}</p>
+      <p>
+        <strong>Garantie:</strong>
+        <span class="badge" [ngClass]="intervention.EstSousGarantie ? 'bg-success' : 'bg-danger'">
+          {{ intervention.EstSousGarantie ? 'En garantie' : 'Hors garantie' }}
+        </span>
+      </p>
+    </div>
+  </div>
+
+  <!-- Planification -->
+  <div class="card mb-3" *ngIf="intervention.Statut === 'Planifiée'">
+    <div class="card-header bg-primary text-white">Planification</div>
+    <div class="card-body">
+      <p><strong>Date d'intervention:</strong> {{ intervention.DateIntervention | date:'short' }}</p>
+      <p><strong>Technicien assigné:</strong> {{ intervention.TechnicienNom || '-' }}</p>
+    </div>
+  </div>
+
+  <!-- Actions -->
+  <div class="d-flex justify-content-end mt-3">
+    <button class="btn btn-danger me-2" *ngIf="intervention.Statut === 'Planifiée'" (click)="annuler()">Annuler</button>
+    <button class="btn btn-warning" *ngIf="intervention.Statut === 'Planifiée'" (click)="marquerEnCours()">Marquer comme en cours</button>
+        <button class="btn btn-warning" *ngIf="intervention.Statut === 'En cours'" (click)="CloturerIntervention()">Clôturer l'intervention</button>
+    <button class="btn btn-secondary ms-2" (click)="router.navigate(['/interventions'])">Retour</button>
+  </div>
+</div>

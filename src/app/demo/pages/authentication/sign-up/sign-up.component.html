@@ -3,6 +3,39 @@
     <h2 class="register-title">Inscription</h2>
 
     <form (ngSubmit)="onRegister()" #registerForm="ngForm" class="register-form">
+
+      <!-- Prénom -->
+      <div class="form-group">
+        <input
+          type="text"
+          placeholder="Prénom"
+          [(ngModel)]="user.firstName"
+          name="firstName"
+          required
+          #firstName="ngModel"
+          class="form-input"
+        />
+        <div *ngIf="firstName.invalid && firstName.touched" class="error-message">
+          Le prénom est requis.
+        </div>
+      </div>
+
+      <!-- Nom -->
+      <div class="form-group">
+        <input
+          type="text"
+          placeholder="Nom"
+          [(ngModel)]="user.lastName"
+          name="lastName"
+          required
+          #lastName="ngModel"
+          class="form-input"
+        />
+        <div *ngIf="lastName.invalid && lastName.touched" class="error-message">
+          Le nom est requis.
+        </div>
+      </div>
+
       <!-- Nom d'utilisateur -->
       <div class="form-group">
         <input
@@ -15,7 +48,24 @@
           class="form-input"
         />
         <div *ngIf="username.invalid && username.touched" class="error-message">
-          <i class="fas fa-exclamation-circle"></i> Le nom d'utilisateur est requis.
+          Le nom d'utilisateur est requis.
+        </div>
+      </div>
+
+      <!-- Email -->
+      <div class="form-group">
+        <input
+          type="email"
+          placeholder="Email"
+          [(ngModel)]="user.email"
+          name="email"
+          required
+          email
+          #email="ngModel"
+          class="form-input"
+        />
+        <div *ngIf="email.invalid && email.touched" class="error-message">
+          Email invalide.
         </div>
       </div>
 
@@ -27,37 +77,20 @@
           [(ngModel)]="user.password"
           name="password"
           required
+          minlength="6"
           #password="ngModel"
           class="form-input"
         />
         <div *ngIf="password.invalid && password.touched" class="error-message">
-          <i class="fas fa-exclamation-circle"></i> Le mot de passe est requis.
+          Le mot de passe est requis (min 6 caractères).
         </div>
       </div>
 
-      <!-- Sélection du rôle -->
-      <div class="form-group">
-        <label class="select-label">Rôle</label>
-        <select
-          [(ngModel)]="selectedRole"
-          name="roleName"
-          required
-          #roleName="ngModel"
-          class="form-select"
-          (ngModelChange)="updateRoles()"
-        >
-          <option value="" disabled selected>Choisissez un rôle</option>
-          <option value="ResponsableSAV">Responsable SAV</option>
-          <option value="Client">Client</option>
-        </select>
-        <div *ngIf="roleName.invalid && roleName.touched" class="error-message">
-          <i class="fas fa-exclamation-circle"></i> Le rôle est requis.
-        </div>
-      </div>
-
+      <!-- Bouton -->
       <button type="submit" [disabled]="registerForm.invalid" class="submit-btn">
         S'inscrire
       </button>
+
     </form>
   </div>
 </div>

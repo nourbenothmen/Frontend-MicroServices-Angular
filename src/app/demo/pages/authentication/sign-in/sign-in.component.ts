@@ -21,7 +21,7 @@ export class LoginComponent implements OnInit {
   infoMessage = '';
   errorType: 'role' | 'credentials' | 'other' | 'ResponsableSAV' | null = null;
 
-  private readonly REQUIRED_ROLE = 'ResponsableSAV';
+  //private readonly REQUIRED_ROLE = 'ResponsableSAV';
 
   constructor(
     private auth: AuthService,
@@ -36,59 +36,33 @@ export class LoginComponent implements OnInit {
     }
   }
 
-  onLogin() {
-    this.errorMessage = '';
-    this.errorType = null;
-    this.infoMessage = '';
+onLogin() {
+  this.errorMessage = '';
+  this.errorType = null;
 
-    this.auth.login({ email: this.username, password: this.password }).subscribe({
-      next: (res) => {
-        try {
-          // 🔹 Suppose que ton API renvoie directement un token JWT ou les rôles
-          // Par exemple res.token contient le JWT
-          const token = res['token']; // <-- adapte selon la clé réelle de ton API
-          if (!token) throw new Error('Token non présent dans la réponse');
+  this.auth.login({ email: this.username, password: this.password }).subscribe({
+    next: (res) => {
+      const token = res.token;
+      this.auth.saveToken(token);
 
-          const decoded = jwtDecode<any>(token);
+      const roles = this.auth.getRoles();
+      console.log('Roles:', roles);
 
-// Normaliser roles en tableau
-let roles: string[] = [];
-
-if (decoded.roles) {
-  roles = Array.isArray(decoded.roles) ? decoded.roles : [decoded.roles];
-} else if (decoded.role) {  // ton champ role
-  roles = [decoded.role];
-} else if (decoded['http://schemas.microsoft.com/ws/2008/06/identity/claims/role']) {
-  roles = [decoded['http://schemas.microsoft.com/ws/2008/06/identity/claims/role']];
-}
-console.log('Roles:', roles);
-
-if (roles.includes(this.REQUIRED_ROLE)) {
-  const redirectUrl = localStorage.getItem('redirectUrl') || '/analytics';
-  localStorage.removeItem('redirectUrl');
-  this.router.navigateByUrl(redirectUrl);
-} else {
-  this.errorMessage = 'Accès interdit : vous devez être ResponsableSAV.';
-  this.errorType = 'role';
-}
-        } catch (e) {
-          console.error('Erreur lors du traitement de la réponse login', e);
-          this.errorMessage = 'Réponse invalide du serveur.';
-          this.errorType = 'other';
-        }
-      },
-      error: (err) => {
-        if (err.status === 403) {
-          this.errorMessage = 'Accès interdit : vous devez être ResponsableSAV.';
-          this.errorType = 'ResponsableSAV';
-        } else if (err.status === 401) {
-          this.errorMessage = 'Email ou mot de passe incorrect.';
-          this.errorType = 'credentials';
-        } else {
-          this.errorMessage = 'Erreur de connexion.';
-          this.errorType = 'other';
-        }
+      // 🔀 REDIRECTION SELON RÔLE
+      if (roles.includes('ResponsableSAV')) {
+        this.router.navigate(['/analytics']);
+      } 
+      else if (roles.includes('Client')) {
+        this.router.navigate(['/analytics']);
+      } 
+      else {
+        this.errorMessage = 'Rôle inconnu.';
       }
-    });
-  }
+    },
+    error: () => {
+      this.errorMessage = 'Email ou mot de passe incorrect.';
+    }
+  });
+}
+
 }

@@ -1,0 +1,101 @@
+/* === STYLE D'IMPRESSION - FACTURE PROPRE === */
+@media print {
+  /* 1. Cacher tout le layout de l'application */
+  app-sidebar,
+  app-header,
+  app-topbar,
+  app-footer,
+  .sidebar,
+  .navbar,
+  .topbar,
+  .layout-sidebar,
+  .layout-topbar,
+  nav,
+  header,
+  footer,
+  aside {
+    display: none !important;
+  }
+
+  /* 2. Cacher les éléments inutiles dans la page */
+  button,
+  .btn,
+  input,
+  select,
+  textarea,
+  .no-print {
+    display: none !important;
+  }
+
+  /* 3. Le body et la page entière */
+  body {
+    background: white !important;
+    margin: 0;
+    padding: 0;
+  }
+
+  /* 4. Le conteneur principal de la facture */
+  app-cloture-facturation,
+  .container {
+    display: block !important;
+    visibility: visible !important;
+    position: static !important;
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 20mm 15mm !important;
+    box-sizing: border-box;
+  }
+
+  /* 5. Fond blanc et bordures propres */
+  .card {
+    border: 1px solid #000 !important;
+    box-shadow: none !important;
+    background: white !important;
+  }
+
+  .card-header {
+    background-color: #f8f9fa !important;
+    border-bottom: 2px solid #000 !important;
+    font-weight: bold;
+  }
+
+  /* 6. Améliorer les tableaux */
+  table {
+    width: 100% !important;
+    border-collapse: collapse !important;
+  }
+
+  th, td {
+    border: 1px solid #000 !important;
+    padding: 8px !important;
+    text-align: left;
+  }
+
+  th {
+    background-color: #f0f0f0 !important;
+  }
+
+  /* 7. Totaux en évidence */
+  .bg-light {
+    background-color: #f8f9fa !important;
+    border: 2px solid #007bff !important;
+  }
+
+  .text-primary {
+    color: #000 !important;
+    font-weight: bold;
+  }
+
+  /* 8. Titre principal plus grand */
+  h2 {
+    font-size: 24pt !important;
+    text-align: center;
+    margin-bottom: 20mm !important;
+  }
+
+  /* 9. Enlever les marges inutiles */
+  * {
+    color: #000 !important;
+  }
+}

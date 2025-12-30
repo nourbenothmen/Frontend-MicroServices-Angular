@@ -1,13 +1,12 @@
 // angular import
-import { Component, OnInit, inject, output } from '@angular/core';
+import { Component, OnInit, inject, output,Input} from '@angular/core';
 import { Location, LocationStrategy } from '@angular/common';
 
 // project import
 import { environment } from 'src/environments/environment';
-import { NavigationItem, NavigationItems } from '../navigation';
+import { NavigationItem} from '../navigation';
 import { SharedModule } from 'src/app/theme/shared/shared.module';
 import { NavGroupComponent } from './nav-group/nav-group.component';
-
 @Component({
   selector: 'app-nav-content',
   imports: [SharedModule, NavGroupComponent],
@@ -15,6 +14,9 @@ import { NavGroupComponent } from './nav-group/nav-group.component';
   styleUrls: ['./nav-content.component.scss']
 })
 export class NavContentComponent implements OnInit {
+@Input() navigationItems: NavigationItem[] = [];
+
+  navigation: NavigationItem[] = []; // ✅ OBLIGATOIRE
   private location = inject(Location);
   private locationStrategy = inject(LocationStrategy);
 
@@ -23,7 +25,6 @@ export class NavContentComponent implements OnInit {
   currentApplicationVersion = environment.appVersion;
 
   // public pops
-  navigation: NavigationItem[];
   contentWidth: number;
   wrapperWidth!: number;
   scrollWidth: number;
@@ -32,22 +33,34 @@ export class NavContentComponent implements OnInit {
   NavMobCollapse = output();
 
   // constructor
-  constructor() {
-    this.navigation = NavigationItems;
-    this.windowWidth = window.innerWidth;
-    this.scrollWidth = 0;
-    this.contentWidth = 0;
-  }
+ constructor() {
+  this.windowWidth = window.innerWidth;
+  this.scrollWidth = 0;
+  this.contentWidth = 0;
+}
 
   // life cycle event
-  ngOnInit() {
+  /*ngOnInit() {
     if (this.windowWidth < 992) {
       setTimeout(() => {
         document.querySelector('.pcoded-navbar')?.classList.add('menupos-static');
         (document.querySelector('#nav-ps-gradient-able') as HTMLElement).style.height = '100%';
       }, 500);
     }
+  }*/
+
+    ngOnInit() {
+  // 🔥 menu filtré par rôle
+  this.navigation = this.navigationItems;
+
+  if (this.windowWidth < 992) {
+    setTimeout(() => {
+      document.querySelector('.pcoded-navbar')?.classList.add('menupos-static');
+      (document.querySelector('#nav-ps-gradient-able') as HTMLElement).style.height = '100%';
+    }, 500);
   }
+}
+
 
   fireLeave() {
     const sections = document.querySelectorAll('.pcoded-hasmenu');

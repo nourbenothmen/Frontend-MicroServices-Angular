@@ -1,0 +1,35 @@
+<div class="container py-4">
+  <h2 class="mb-4">Mes articles</h2>
+
+  <div *ngIf="loading" class="text-center">
+    <span class="spinner-border text-primary"></span> Chargement...
+  </div>
+
+  <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+
+  <div *ngFor="let article of articles" class="card mb-3">
+    <div class="card-body d-flex justify-content-between align-items-center">
+      <div>
+        <h5 class="card-title">
+          <ng-container *ngIf="article.nom.includes('Chaudière')">🔥</ng-container>
+          <ng-container *ngIf="article.nom.includes('Radiateur')">🛠️</ng-container>
+          <ng-container *ngIf="article.nom.includes('Chauffe-eau')">💧</ng-container>
+          {{ article.nom }}
+        </h5>
+        <p class="mb-1"><strong>N° Série:</strong> {{ article.numeroSerie }}</p>
+        <p class="mb-1"><strong>Date d'achat:</strong> {{ article.dateAchat | date:'dd/MM/yyyy' }}</p>
+        <p class="mb-0"><strong>Garantie jusqu'au:</strong> {{ article.dateFinGarantie | date:'dd/MM/yyyy' }}</p>
+      </div>
+
+      <div>
+        <span 
+          class="badge fs-6"
+          [ngClass]="article.estSousGarantie ? 'bg-success' : 'bg-danger text-white'">
+          <i *ngIf="article.estSousGarantie" class="fas fa-check-circle me-1"></i>
+          <i *ngIf="!article.estSousGarantie" class="fas fa-exclamation-triangle me-1"></i>
+          {{ article.estSousGarantie ? 'Sous garantie' : 'Hors garantie' }}
+        </span>
+      </div>
+    </div>
+  </div>
+</div>

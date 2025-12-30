@@ -1,20 +1,27 @@
 <ng-scrollbar (clickOutside)="navMob()" style="height: calc(100vh - 56px)">
   <div class="navbar-content">
-    <ul class="nav pcoded-inner-navbar" (clickOutside)="fireOutClick()">
+
+    <!-- Logo avec moins d'espace en bas -->
+    <div class="nav-logo text-center py-4 pb-2">  <!-- réduit le padding bottom -->
+      <img 
+        src="assets/images/logosavrond.jpg" 
+        alt="Logo Service Sanitaire et Chauffage"
+        class="img-fluid rounded-circle"
+        style="width: 120px; height: 120px; object-fit: contain; border: 4px solid #fff; box-shadow: 0 4px 10px rgba(0,0,0,0.2);"
+      />
+    </div>
+
+    <!-- Séparateur avec moins de marge -->
+    <hr class="mx-3 my-2 border-secondary opacity-25">  <!-- my-4 → my-2 -->
+
+    <!-- Menu -->
+    <ul class="nav pcoded-inner-navbar" (clickOutside)="fireOutClick()" style="margin-top: 0;">
       @for (items of navigation; track items) {
         @if (items.type === 'group') {
           <app-nav-group [item]="items" />
         }
       }
     </ul>
-    <app-card [hidHeader]="true" cardClass="text-center">
-      <i class="feather icon-sunset f-40"></i>
-      <h6 class="mt-3">Help?</h6>
-      <p>Please contact us on our email for need any support</p>
-      <a href="https://codedthemes.support-hub.io/" target="_blank" class="btn btn-primary btn-sm text-white m-0">Support</a>
-    </app-card>
-    <div class="version">
-      <label disabled class="pe-auto">v{{ currentApplicationVersion }}</label>
-    </div>
+
   </div>
 </ng-scrollbar>

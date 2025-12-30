@@ -1,0 +1,47 @@
+@media print {
+  /* Cacher tout sauf la facture */
+  body * {
+    visibility: hidden;
+  }
+  
+  app-cloture-facturation, app-cloture-facturation * {
+    visibility: visible;
+  }
+  
+  app-cloture-facturation {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+
+  /* Cacher les boutons d'édition */
+  button, input, textarea, select, .no-print {
+    display: none !important;
+  }
+
+  /* Fond blanc et bordures propres */
+  .card {
+    border: 1px solid #000 !important;
+    box-shadow: none !important;
+  }
+
+  .alert-warning {
+    border: 1px solid #ffc107;
+    background-color: #fff8e1 !important;
+  }
+
+  /* Titre plus grand */
+  h2, h3 {
+    color: #000 !important;
+  }
+
+  /* Assurer que les tableaux sont bien imprimés */
+  table {
+    border-collapse: collapse;
+  }
+
+  th, td {
+    border: 1px solid #000 !important;
+  }
+}

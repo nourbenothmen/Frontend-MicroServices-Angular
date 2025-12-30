@@ -1,0 +1,80 @@
+<div class="container mt-4">
+  <div class="card shadow">
+    <div class="card-header bg-primary text-white">
+      <h4>
+        <i class="fas fa-user-plus me-2"></i>
+        Ajouter un technicien
+      </h4>
+    </div>
+
+    <div class="card-body">
+      <form (ngSubmit)="submit()" #f="ngForm">
+
+        <!-- Nom -->
+        <div class="mb-3">
+          <label class="form-label">Nom</label>
+          <input
+            type="text"
+            class="form-control"
+            name="nom"
+            [(ngModel)]="technicien.nom"
+            required>
+        </div>
+
+        <!-- Prénom -->
+        <div class="mb-3">
+          <label class="form-label">Prénom</label>
+          <input
+            type="text"
+            class="form-control"
+            name="prenom"
+            [(ngModel)]="technicien.prenom"
+            required>
+        </div>
+        
+         <div class="mb-3">
+          <label class="form-label">Email</label>
+          <input
+            type="text"
+            class="form-control"
+            name="email"
+            [(ngModel)]="technicien.email"
+            required>
+        </div>
+
+        <!-- Téléphone -->
+        <div class="mb-3">
+          <label class="form-label">Téléphone</label>
+          <input
+            type="text"
+            class="form-control"
+            name="telephone"
+            [(ngModel)]="technicien.telephone"
+            required>
+        </div>
+
+        <!-- Spécialité -->
+        <div class="mb-3">
+          <label class="form-label">Spécialité</label>
+          <input
+            type="text"
+            class="form-control"
+            name="specialite"
+            [(ngModel)]="technicien.specialite"
+            required>
+        </div>
+
+        <!-- Actions -->
+        <div class="d-flex justify-content-end">
+          <button type="submit" class="btn btn-success me-2" [disabled]="f.invalid">
+            <i class="fas fa-save me-1"></i> Enregistrer
+          </button>
+          <button type="button" class="btn btn-secondary" routerLink="/techniciens">
+            Annuler
+          </button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+</div>

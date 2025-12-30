@@ -5,6 +5,8 @@ import { Routes, RouterModule } from '@angular/router';
 // project import
 import { AdminComponent } from './theme/layout/admin/admin.component';
 import { GuestComponent } from './theme/layout/guest/guest.component';
+import { RoleGuard } from './demo/guards/role.guard';
+
 
 const routes: Routes = [
   {
@@ -16,10 +18,23 @@ const routes: Routes = [
         redirectTo: '/analytics',
         pathMatch: 'full'
       },
-      {
-        path: 'analytics',
-        loadComponent: () => import('./demo/dashboard/dash-analytics.component').then((c) => c.DashAnalyticsComponent)
-      },
+     {
+  path: 'analytics',
+  canActivate: [RoleGuard],
+  data: { roles: ['Client', 'ResponsableSAV'] },
+  loadComponent: () =>
+    import('./demo/pages/Dashboard-ResponsableSAV/responsable-sav-dashboard.component')
+      .then(c => c.ResponsableSavDashboardComponent)
+},
+ {
+  path: 'client-dashboard',
+  canActivate: [RoleGuard],
+  data: { roles: ['Client'] },
+  loadComponent: () =>
+    import('./demo/pages/Dashboard-Client/client-dashboard.component')
+      .then(c => c.ClientDashboardComponent)
+},
+
       {
         path: 'component',
         loadChildren: () => import('./demo/ui-element/ui-basic.module').then((m) => m.UiBasicModule)
@@ -32,14 +47,140 @@ const routes: Routes = [
         path: 'forms',
         loadComponent: () => import('./demo/forms/form-elements/form-elements.component').then((c) => c.FormElementsComponent)
       },
+    {
+  path: 'GestionClients',
+  canActivate: [RoleGuard],
+  data: { roles: ['ResponsableSAV'] },
+  loadComponent: () =>
+    import('./demo/pages/customer-management/liste-costumer/liste-costumer.component')
+      .then(c => c.ListeCostumerComponent)
+},
+
       {
-        path: 'tables',
-        loadComponent: () => import('./demo/tables/tbl-bootstrap/tbl-bootstrap.component').then((c) => c.TblBootstrapComponent)
+  path: 'GestionClients/add',  canActivate: [RoleGuard],
+  data: { roles: ['ResponsableSAV'] },
+  loadComponent: () => import('./demo/pages/customer-management/add-customer/add-costumer.component').then(c => c.AddCustomerComponent)
+},
+      {
+  path: 'GestionArticles/add-article',  canActivate: [RoleGuard],
+  data: { roles: ['ResponsableSAV'] },
+  loadComponent: () => import('./demo/pages/article-management/add-article/add-article.component').then(c => c.AddArticleComponent)
+},
+
+{
+  path: 'customer-management/edit-customer/:id',  canActivate: [RoleGuard],
+  data: { roles: ['ResponsableSAV'] },
+  loadComponent: () =>
+    import('./demo/pages/customer-management/edit-costumer/edit-costumer.component')
+      .then(m => m.EditCostumerComponent)
+},
+
+{
+  path: 'GestionArticles/edit-article/:id',  canActivate: [RoleGuard],
+  data: { roles: ['ResponsableSAV'] },
+  loadComponent: () =>
+    import('./demo/pages/article-management/edit-article/edit-article.component')
+      .then(m => m.EditArticleComponent)
+},{
+  path: 'AddReclamation',
+  canActivate: [RoleGuard],
+  data: { roles: ['Client'] },
+  loadComponent: () =>
+    import('./demo/pages/customer-management/reclamation/add-reclamation/add-reclamation.component')
+      .then(c => c.AddReclamationComponent)
+},
+{
+  path: 'reclamations/details/:id',
+  loadComponent: () =>
+    import('./demo/pages/customer-management/reclamation/details-reclamation/details-reclamation.component')
+      .then(c => c.DetailsReclamationComponent)
+}
+
+,
+{
+  path: 'MesReclamations',
+  canActivate: [RoleGuard],
+  data: { roles: ['Client'] },
+  loadComponent: () =>
+    import('./demo/pages/customer-management/reclamation/liste-reclamation/liste-reclamation.component')
+      .then(c => c.ListeReclamationComponent)
+},
+{
+  path: 'MesArticles',
+  canActivate: [RoleGuard],
+  data: { roles: ['Client'] },
+  loadComponent: () =>
+    import('./demo/pages/article-management/mes-articles/mesarticles.component')
+      .then(c => c.MesArticlesComponent)
+}
+,
+   {
+        path: 'GestionReclamations',  canActivate: [RoleGuard],
+  data: { roles: ['ResponsableSAV'] },
+        loadComponent: () => import('./demo/pages/customer-management/reclamation/liste-reclamation/liste-reclamation.component').then((c) => c.ListeReclamationComponent)
+      },
+      {
+        path: 'GestionArticles',  canActivate: [RoleGuard],
+  data: { roles: ['ResponsableSAV'] },
+        loadComponent: () => import('./demo/pages/article-management/liste-article/liste-article.component').then((c) => c.ListeArticleComponent )
       },
       {
         path: 'sample-page',
         loadComponent: () => import('./demo/other/sample-page/sample-page.component').then((c) => c.SamplePageComponent)
-      }
+      },
+      /* ============================= */
+  /* 🔹 INTERVENTIONS (SAV) */
+  /* ============================= */
+
+  {
+        path: 'interventions',  canActivate: [RoleGuard],
+  data: { roles: ['ResponsableSAV'] },
+        loadComponent: () => import('./demo/pages/intervention-management/liste-intervention/liste-intervention.component').then((c) => c.ListeInterventionComponent)
+      },
+
+      {
+  path: 'interventions/:id/cloture',
+  loadComponent: () => import('./demo/pages/intervention-management/liste-intervention/Facture/cloture-facturation.component').then(m => m.ClotureFacturationComponent)
+},
+
+ {
+        path: 'techniciens',  canActivate: [RoleGuard],
+  data: { roles: ['ResponsableSAV'] },
+        loadComponent: () => import('./demo/pages/intervention-management/Technicien/liste-technicien/liste-technicien.component').then((c) => c.ListeTechnicienComponent)
+      },
+          {
+  path: 'techniciens/add',  canActivate: [RoleGuard],
+  data: { roles: ['ResponsableSAV'] },
+  loadComponent: () => import('./demo/pages/intervention-management/Technicien/add-technicien/add-technicien.component').then(c => c.AddTechnicienComponent)
+},
+{
+  path: 'techniciens/edit/:id',
+  loadComponent: () =>
+    import('./demo/pages/intervention-management/Technicien/edit-technicien/edit-technicien.component')
+      .then(m => m.EditTechnicienComponent)
+}
+,
+
+  {
+        path: 'interventions/add',  canActivate: [RoleGuard],
+  data: { roles: ['ResponsableSAV'] },
+        loadComponent: () => import('./demo/pages/intervention-management/add-intervention/add-intervention.component').then((c) => c.AddInterventionComponent)
+      },
+  {
+    path: 'interventions/edit/:id',  canActivate: [RoleGuard],
+  data: { roles: ['ResponsableSAV'] },
+    loadComponent: () => import('./demo/pages/intervention-management/edit-intervention/edit-intervention.component').then((c) => c.EditInterventionComponent)
+  },
+  {
+    path: 'interventions/details/:id',  canActivate: [RoleGuard],
+  data: { roles: ['ResponsableSAV'] },
+    loadComponent: () => import('./demo/pages/intervention-management/liste-intervention/details-intervention.component').then((c) => c.DetailsInterventionComponent)
+  },
+
+  /* ============================= */
+  /* 🔹 REDIRECTIONS */
+  /* ============================= */
+
     ]
   },
   {

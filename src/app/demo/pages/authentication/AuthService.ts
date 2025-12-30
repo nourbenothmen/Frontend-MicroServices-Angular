@@ -10,25 +10,29 @@ const API_URL = 'https://localhost:7091/apigateway/auth';
 })
 export class AuthService {
 
+  private readonly TOKEN_KEY = 'token';
+
   constructor(private http: HttpClient) {}
 
   /* ===========================
      AUTHENTICATION
      =========================== */
 
-  // 🔐 LOGIN → /token (IMPORTANT)
-login(credentials: { email: string; password: string }): Observable<any> {
-  return this.http.post(`${API_URL}/token`, {
-    Email: credentials.email,    // ⚠ correspond au backend
-    Password: credentials.password
-  });
-}
+  // 🔐 LOGIN
+  login(credentials: { email: string; password: string }): Observable<any> {
+    return this.http.post(`${API_URL}/token`, {
+      Email: credentials.email,
+      Password: credentials.password
+    });
+  }
 
-  // 📝 REGISTER → /register
+  // 📝 REGISTER (sans rôle)
   register(user: {
+    firstName: string;
+    lastName: string;
     username: string;
+    email: string;
     password: string;
-    roles: { roleName: string }[];
   }): Observable<any> {
     return this.http.post(`${API_URL}/register`, user);
   }
@@ -38,15 +42,15 @@ login(credentials: { email: string; password: string }): Observable<any> {
      =========================== */
 
   saveToken(token: string): void {
-    localStorage.setItem('access-token', token);
+    localStorage.setItem(this.TOKEN_KEY, token);
   }
 
   getToken(): string | null {
-    return localStorage.getItem('access-token');
+    return localStorage.getItem(this.TOKEN_KEY);
   }
 
   logout(): void {
-    localStorage.removeItem('access-token');
+    localStorage.removeItem(this.TOKEN_KEY);
   }
 
   /* ===========================
@@ -75,20 +79,29 @@ login(credentials: { email: string; password: string }): Observable<any> {
   }
 
   /* ===========================
-     ROLES
+     ROLES (ASP.NET Identity)
      =========================== */
 
   getRoles(): string[] {
     const decoded = this.getDecodedToken();
     if (!decoded) return [];
 
-    // ASP.NET Identity → role ou roles
+    // Format simple
+    if (decoded.roles) {
+      return Array.isArray(decoded.roles) ? decoded.roles : [decoded.roles];
+    }
+
+    // Claim "role"
     if (decoded.role) {
       return Array.isArray(decoded.role) ? decoded.role : [decoded.role];
     }
 
-    if (decoded.roles) {
-      return decoded.roles;
+    // Claim ASP.NET Identity
+    const identityRole =
+      decoded['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
+
+    if (identityRole) {
+      return Array.isArray(identityRole) ? identityRole : [identityRole];
     }
 
     return [];
@@ -119,5 +132,10 @@ login(credentials: { email: string; password: string }): Observable<any> {
   getUsername(): string | null {
     const decoded = this.getDecodedToken();
     return decoded?.sub || decoded?.username || null;
+  }
+
+  getEmail(): string | null {
+    const decoded = this.getDecodedToken();
+    return decoded?.email || null;
   }
 }

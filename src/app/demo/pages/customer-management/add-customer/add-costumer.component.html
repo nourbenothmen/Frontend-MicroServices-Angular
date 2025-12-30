@@ -1,0 +1,74 @@
+<div class="modal-header bg-primary text-white rounded-top">
+  <h4 class="modal-title">
+    {{ isEdit ? '✏️ Modifier' : '➕ Ajouter' }} Client
+  </h4>
+  <button type="button" class="btn-close btn-close-white" (click)="onClose()"></button>
+</div>
+
+<div class="modal-body p-4 bg-light">
+  <form (ngSubmit)="onSave()" #customerForm="ngForm" class="needs-validation" novalidate>
+    <div class="mb-3">
+      <label class="form-label fw-bold">Prénom 👤</label>
+      <input 
+        type="text" 
+        class="form-control shadow-sm" 
+        [(ngModel)]="client.firstName" 
+        name="firstName" 
+        required
+        placeholder="Entrez le prénom">
+    </div>
+    
+    <div class="mb-3">
+      <label class="form-label fw-bold">Nom 👤</label>
+      <input 
+        type="text" 
+        class="form-control shadow-sm" 
+        [(ngModel)]="client.lastName" 
+        name="lastName" 
+        required
+        placeholder="Entrez le nom">
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label fw-bold">Adresse 🏠</label>
+      <input 
+        type="text" 
+        class="form-control shadow-sm" 
+        [(ngModel)]="client.address" 
+        name="address" 
+        required
+        placeholder="Entrez l'adresse">
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label fw-bold">Téléphone 📞</label>
+      <input 
+        type="tel" 
+        class="form-control shadow-sm" 
+        [(ngModel)]="client.phone" 
+        name="phone" 
+        required
+        placeholder="Ex: +216 99 999 999">
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label fw-bold">User ID 🆔</label>
+      <input 
+        type="text" 
+        class="form-control shadow-sm" 
+        [(ngModel)]="client.userId" 
+        name="userId" 
+        required
+        placeholder="ID utilisateur">
+    </div>
+
+    <div class="modal-footer border-0 pt-3">
+      <button type="button" class="btn btn-secondary fw-bold" (click)="onClose()">
+        ❌ Annuler
+      </button>
+      <button type="submit" class="btn btn-primary fw-bold" [disabled]="customerForm.invalid">
+        💾 Enregistrer
+      </button>
+    </div>
+  </form>
+</div>
