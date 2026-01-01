@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ReclamationService } from '../../../../services/reclamation.service';
 import { DecimalPipe, DatePipe, CommonModule } from '@angular/common'; // <-- Ajouté ici
-
+import { AuthService } from '../../../../../demo/pages/authentication/AuthService';
 
 @Component({
   selector: 'app-details-reclamation',
@@ -17,7 +17,8 @@ export class DetailsReclamationComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private reclamationService: ReclamationService
+    private reclamationService: ReclamationService,
+    public authService: AuthService 
   ) {}
 
   ngOnInit(): void {

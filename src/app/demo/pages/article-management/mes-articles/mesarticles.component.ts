@@ -53,14 +53,15 @@ this.http.get<any[]>(this.ARTICLES_API, { headers })
     next: (data) => {
       console.log('Articles reçus :', data);
       // Mapper les propriétés de l'API vers notre interface
-      this.articles = data.map(a => ({
-        id: a.articleId,
-        nom: a.displayName,
-        numeroSerie: a.serialNumber,
-        dateAchat: '', // pas fourni par l'API
-        dateFinGarantie: a.dateFinGarantie,
-        estSousGarantie: a.estSousGarantie
-      }));
+     this.articles = data.map(a => ({
+  id: a.articleId,
+  nom: a.displayName,
+  numeroSerie: a.serialNumber,
+  dateAchat: a.dateAchat,              // ✅ CORRECTION
+  dateFinGarantie: a.dateFinGarantie,
+  estSousGarantie: a.estSousGarantie
+}));
+
       this.loading = false;
       if (this.articles.length === 0) {
         alert('Aucun article trouvé dans votre compte.');
@@ -73,5 +74,19 @@ this.http.get<any[]>(this.ARTICLES_API, { headers })
     }
   });
     }
+
+
+    isGarantieExpiree(dateFinGarantie: string | Date): boolean {
+  if (!dateFinGarantie) return true;
+
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  const finGarantie = new Date(dateFinGarantie);
+  finGarantie.setHours(0, 0, 0, 0);
+
+  return finGarantie <= today;
+}
+
 
 }

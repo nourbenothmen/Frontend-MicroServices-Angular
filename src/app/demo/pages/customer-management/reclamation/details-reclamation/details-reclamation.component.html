@@ -7,7 +7,7 @@
 
     <div class="mb-3">
       <strong>Statut</strong><br>
-      <span class="badge bg-primary px-3 py-2">Intervention en cours</span>
+      <span class="badge bg-primary px-3 py-2">Intervention {{ reclamation.status }}</span>
     </div>
 
     <div class="mb-3">
@@ -17,7 +17,7 @@
 
     <div class="mb-3">
       <strong>Problème signalé</strong><br>
-      {{ reclamation.description }}
+      {{ reclamation.problemType }}
     </div>
 
     <div class="mb-3">
@@ -43,8 +43,13 @@
       </span>
     </div>
 
-    <button class="btn btn-primary btn-lg">
-      <i class="fas fa-phone me-2"></i>Contacter le support
-    </button>
+   <button
+  class="btn btn-primary btn-lg"
+  *ngIf="!authService.hasRole('ResponsableSAV')"
+>
+  <i class="fas fa-phone me-2"></i>
+  Contacter le support
+</button>
+
   </div>
 </div>

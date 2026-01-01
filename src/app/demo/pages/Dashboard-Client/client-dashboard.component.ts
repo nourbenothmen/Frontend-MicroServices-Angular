@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { ClientDashboardService, ClientStats, Reclamation } from '../../../../app/demo/services/client-dashboard.service';
+import { ClientDashboardService, ClientStats, RecentReclamation} from '../../../../app/demo/services/client-dashboard.service';
 import { CommonModule, DecimalPipe, DatePipe } from '@angular/common';
-
+import { ReclamationStatusPipe } from '../../../../app/demo/pages/customer-management/reclamation/reclamation-status.pipe'; // ← Ajoute l'import du pipe
 @Component({
   selector: 'app-client-dashboard',
   standalone: true,
-  imports: [CommonModule], // <-- ajoute ça pour number, date
+  imports: [CommonModule,ReclamationStatusPipe], // <-- ajoute ça pour number, date
   templateUrl: './client-dashboard.component.html',
   styleUrls: ['./client-dashboard.component.scss']
 })
@@ -13,7 +13,7 @@ export class ClientDashboardComponent implements OnInit {
 
   stats: ClientStats = { totalReclamations: 0, enCours: 0, terminees: 0, articles: 0 };
 
-  recentReclamations: Reclamation[] = [];
+  recentReclamations: RecentReclamation[] = [];
   loadingStats = true;
   loadingReclamations = true;
 
@@ -24,26 +24,36 @@ export class ClientDashboardComponent implements OnInit {
     this.loadRecentReclamations();
   }
 
-  loadStats() {
-    this.dashboardService.getClientStats().subscribe({
-      next: (res) => { this.stats = res; this.loadingStats = false; },
-      error: (err) => { console.error(err); this.loadingStats = false; }
-    });
-  }
+loadStats() {
+  this.dashboardService.getClientStats().subscribe({
+    next: (res) => {
+      this.stats = res;
+      this.loadingStats = false;
+    }
+  });
+}
 
+loadRecentReclamations() {
+  this.dashboardService.getRecentReclamations().subscribe({
+    next: (res) => {
+      console.log('Données réclamations récentes :', res); // ← VOILÀ !
+      this.recentReclamations = res;
+      this.loadingReclamations = false;
+    },
+    error: (err) => {
+      console.error('Erreur API recent', err);
+      this.loadingReclamations = false;
+    }
+  });
+}
 
-  getStatusClass(status: string): string {
+getStatusClass(status: string): string {
   switch (status) {
-    case 'EnCours':
-      return 'badge-warning';
-    case 'Planifiée':
-      return 'badge-info';
-    case 'Terminée':
-      return 'badge-success';
-    case 'EnAttente':
-      return 'badge-secondary';
-    default:
-      return 'badge-dark';
+    case 'EnAttente': return 'badge en-attente';
+    case 'Planifiée': return 'badge planifiee';
+    case 'En cours': return 'badge en-cours';
+    case 'Terminée': return 'badge terminee';
+    default: return 'badge';
   }
 }
 
@@ -63,10 +73,5 @@ getStatusLabel(status: string): string {
 }
 
 
-  loadRecentReclamations() {
-    this.dashboardService.getRecentReclamations().subscribe({
-      next: (res) => { this.recentReclamations = res; this.loadingReclamations = false; },
-      error: (err) => { console.error(err); this.loadingReclamations = false; }
-    });
-  }
+
 }

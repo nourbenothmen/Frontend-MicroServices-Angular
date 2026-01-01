@@ -21,200 +21,119 @@ export interface NavigationItem {
 
 export const NavigationItems: NavigationItem[] = [
   {
-  id: 'navigation',
-  title: 'Navigation',
-  type: 'group',
-  icon: 'icon-group',
-  children: [
-    {
-      id: 'dashboard-admin',
-      title: 'Tableau de bord',
-      type: 'item',
-      url: '/analytics',         // Dashboard ResponsableSAV
-      icon: 'feather icon-home',
-      roles: ['ResponsableSAV']
-    },
-    {
-      id: 'dashboard-client',
-      title: 'Tableau de bord',
-      type: 'item',
-      url: '/client-dashboard',  // Dashboard Client
-      icon: 'feather icon-home',
-      roles: ['Client']
-    }
-  ]
-},
-  /*
-  {
-    id: 'ui-component',
-    title: 'Ui Component',
+    id: 'navigation',
+    title: 'Navigation',
     type: 'group',
     icon: 'icon-group',
     children: [
       {
-        id: 'basic',
-        title: 'Component',
-        type: 'collapse',
-        icon: 'feather icon-box',
-        children: [
-          {
-            id: 'button',
-            title: 'Button',
-            type: 'item',
-            url: '/component/button'
-          },
-          {
-            id: 'badges',
-            title: 'Badges',
-            type: 'item',
-            url: '/component/badges'
-          },
-          {
-            id: 'breadcrumb-pagination',
-            title: 'Breadcrumb & Pagination',
-            type: 'item',
-            url: '/component/breadcrumb-paging'
-          },
-          {
-            id: 'collapse',
-            title: 'Collapse',
-            type: 'item',
-            url: '/component/collapse'
-          },
-          {
-            id: 'tabs-pills',
-            title: 'Tabs & Pills',
-            type: 'item',
-            url: '/component/tabs-pills'
-          },
-          {
-            id: 'typography',
-            title: 'Typography',
-            type: 'item',
-            url: '/component/typography'
-          }
-        ]
-      }
-    ]
-  },*/
-
-  /*
-  {
-    id: 'chart',
-    title: 'Chart',
-    type: 'group',
-    icon: 'icon-group',
-    children: [
-      {
-        id: 'apexchart',
-        title: 'ApexChart',
+        id: 'dashboard-admin',
+        title: 'Tableau de bord',
         type: 'item',
-        url: '/chart',
-        classes: 'nav-item',
-        icon: 'feather icon-pie-chart'
+        url: '/analytics',
+        icon: 'feather icon-home',           // 🏠
+        roles: ['ResponsableSAV']
+      },
+      {
+        id: 'dashboard-client',
+        title: 'Tableau de bord',
+        type: 'item',
+        url: '/client-dashboard',
+        icon: 'feather icon-home',
+        roles: ['Client']
       }
     ]
-  },*/
+  },
   {
-    id: 'forms & tables',
+    id: 'gestion',
     title: 'Gestion',
     type: 'group',
     icon: 'icon-group',
     children: [
       {
-        id: 'tables',
-        title: 'clients',
+        id: 'clients',
+        title: 'Clients',
         type: 'item',
         url: '/GestionClients',
-        classes: 'nav-item',
-        icon: 'feather icon-user',
-        roles: ['ResponsableSAV']
-      },
-        {
-        id: 'tables',
-        title: 'réclamations',
-        type: 'item',
-        url: '/GestionReclamations',
-        classes: 'nav-item',
-        icon: 'feather icon-server',
-        roles: ['ResponsableSAV']
-      },
-        {
-        id: 'tables',
-        title: 'articles',
-        type: 'item',
-        url: '/GestionArticles',
-        classes: 'nav-item',
-        icon: 'feather icon-server',
+        icon: 'feather icon-users',          // 👥
         roles: ['ResponsableSAV']
       },
       {
-        id: 'tables',
-        title: 'techniciens',
+        id: 'reclamations',
+        title: 'Réclamations',
         type: 'item',
-        url: '/techniciens',
-        classes: 'nav-item',
-        icon: 'feather icon-server',
+        url: '/GestionReclamations',
+        icon: 'feather icon-alert-circle',   // ⚠️
         roles: ['ResponsableSAV']
       },
-        {
-        id: 'tables',
-        title: 'interventions',
+      {
+        id: 'articles',
+        title: 'Articles',
+        type: 'item',
+        url: '/GestionArticles',
+        icon: 'feather icon-package',        // 📦
+        roles: ['ResponsableSAV']
+      },
+      {
+        id: 'techniciens',
+        title: 'Techniciens',
+        type: 'item',
+        url: '/techniciens',
+        icon: 'feather icon-users',           // 🔧
+        roles: ['ResponsableSAV']
+      },
+      {
+        id: 'interventions',
+        title: 'Interventions',
         type: 'item',
         url: '/interventions',
-        classes: 'nav-item',
-        icon: 'feather icon-server',
+        icon: 'feather icon-list',         // 🔧
         roles: ['ResponsableSAV']
-      }
-      ,
-        {
-        id: 'tables',
+      },
+      // Client
+      {
+        id: 'mes-reclamations',
         title: 'Mes réclamations',
         type: 'item',
         url: '/MesReclamations',
-        classes: 'nav-item',
-        icon: 'feather icon-server',
-         roles: ['Client']
-      }
-       ,
-        {
-        id: 'tables',
+        icon: 'feather icon-file-text',      // 📄
+        roles: ['Client']
+      },
+      {
+        id: 'nouvelle-reclamation',
         title: 'Nouvelle réclamation',
         type: 'item',
         url: '/AddReclamation',
-        classes: 'nav-item',
-        icon: 'feather icon-server',
+        icon: 'feather icon-plus-circle',    // ➕
         roles: ['Client']
-      }
-      ,
-        {
-        id: 'tables',
-        title: 'mes articles',
+      },
+      {
+        id: 'mes-articles',
+        title: 'Mes articles',
         type: 'item',
         url: '/MesArticles',
-        classes: 'nav-item',
-        icon: 'feather icon-server',
+        icon: 'feather icon-box',            // 📦
         roles: ['Client']
       }
     ]
   },
-    {
-    id: 'Authentication',
+  {
+    id: 'authentication',
     title: 'Authentication',
     type: 'group',
     icon: 'icon-group',
     children: [
       {
-        id: 'signup',
+        id: 'register',
         title: 'Inscription',
         type: 'item',
         url: '/register',
-        icon: 'feather icon-at-sign',
+        icon: 'feather icon-user-plus',
         target: true,
         breadcrumbs: false
       },
       {
-        id: 'signin',
+        id: 'login',
         title: 'Connexion',
         type: 'item',
         url: '/login',
@@ -223,60 +142,5 @@ export const NavigationItems: NavigationItem[] = [
         breadcrumbs: false
       }
     ]
-  },
-  
-  
-  /*
-  {
-    id: 'other',
-    title: 'Other',
-    type: 'group',
-    icon: 'icon-group',
-    children: [
-      {
-        id: 'sample-page',
-        title: 'Sample Page',
-        type: 'item',
-        url: '/sample-page',
-        classes: 'nav-item',
-        icon: 'feather icon-sidebar'
-      },
-      {
-        id: 'menu-level',
-        title: 'Menu Levels',
-        type: 'collapse',
-        icon: 'feather icon-menu',
-        children: [
-          {
-            id: 'menu-level-2.1',
-            title: 'Menu Level 2.1',
-            type: 'item',
-            url: 'javascript:',
-            external: true
-          },
-          {
-            id: 'menu-level-2.2',
-            title: 'Menu Level 2.2',
-            type: 'collapse',
-            children: [
-              {
-                id: 'menu-level-2.2.1',
-                title: 'Menu Level 2.2.1',
-                type: 'item',
-                url: 'javascript:',
-                external: true
-              },
-              {
-                id: 'menu-level-2.2.2',
-                title: 'Menu Level 2.2.2',
-                type: 'item',
-                url: 'javascript:',
-                external: true
-              }
-            ]
-          }
-        ]
-      }
-    ]
-  }*/
+  }
 ];

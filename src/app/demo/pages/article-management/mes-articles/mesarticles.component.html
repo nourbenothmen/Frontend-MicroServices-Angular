@@ -18,7 +18,18 @@
         </h5>
         <p class="mb-1"><strong>N° Série:</strong> {{ article.numeroSerie }}</p>
         <p class="mb-1"><strong>Date d'achat:</strong> {{ article.dateAchat | date:'dd/MM/yyyy' }}</p>
-        <p class="mb-0"><strong>Garantie jusqu'au:</strong> {{ article.dateFinGarantie | date:'dd/MM/yyyy' }}</p>
+        <p class="mb-0">
+  <strong *ngIf="!isGarantieExpiree(article.dateFinGarantie)">
+    Garantie jusqu'au :
+  </strong>
+
+  <strong *ngIf="isGarantieExpiree(article.dateFinGarantie)" class="text-danger">
+    Garantie expirée :
+  </strong>
+
+  {{ article.dateFinGarantie | date:'dd/MM/yyyy' }}
+</p>
+
       </div>
 
       <div>

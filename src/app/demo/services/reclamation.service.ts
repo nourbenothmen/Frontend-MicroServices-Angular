@@ -71,7 +71,7 @@ export class ReclamationService {
   // GET RECLAMATION BY ID
   // ============================
   getReclamationById(id: number): Observable<Reclamation> {
-    return this.http.get<Reclamation>(`${this.API_URL}/${id}`, {
+    return this.http.get<Reclamation>(`${this.API_URL}/${id}/details`, {
       headers: this.getAuthHeaders()
     });
   }

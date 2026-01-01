@@ -126,7 +126,7 @@ export class AddReclamationComponent implements OnInit {
       .subscribe({
         next: () => {
           alert('Réclamation créée avec succès !');
-          this.router.navigate(['/customer-management/my-reclamations']); // ou ta route de liste
+          this.router.navigate(['/MesReclamations']); // ou ta route de liste
         },
         error: (err) => {
           console.error('Erreur création réclamation', err);

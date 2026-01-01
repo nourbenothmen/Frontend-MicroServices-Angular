@@ -35,6 +35,7 @@ export class ResponsableSavDashboardComponent implements OnInit {
     this.dashboardService.getInterventionsToday().subscribe({
       next: (data) => {
         this.interventionsDuJour = data;
+        console.log('Interventions du jour', data);
         this.loading = false;
       },
       error: (err) => console.error('Erreur interventions', err)

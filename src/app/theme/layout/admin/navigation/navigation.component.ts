@@ -6,6 +6,7 @@ import { SharedModule } from 'src/app/theme/shared/shared.module';
 import { NavContentComponent } from './nav-content/nav-content.component';
 import { NavigationItem } from './navigation';
 import { NavigationService } from './navigation.service';
+import { AuthService } from '../../../../../app/demo/pages/authentication/AuthService';
 
 @Component({
   selector: 'app-navigation',
@@ -22,14 +23,14 @@ export class NavigationComponent implements OnInit {
 
   navigationItems: NavigationItem[] = []; // ✅ MENU FILTRÉ
 
-  constructor(private navService: NavigationService) {
+  constructor(private navService: NavigationService,public authService: AuthService) {
     this.windowWidth = window.innerWidth;
   }
 
-  ngOnInit(): void {
-    // 🔐 menu filtré selon les rôles
-    this.navigationItems = this.navService.getMenu();
-  }
+ ngOnInit(): void {
+  this.navigationItems = this.navService.getMenu();
+}
+
 
   // public method
   navMobCollapse() {

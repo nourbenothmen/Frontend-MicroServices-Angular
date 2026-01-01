@@ -53,7 +53,7 @@ onLogin() {
         this.router.navigate(['/analytics']);
       } 
       else if (roles.includes('Client')) {
-        this.router.navigate(['/analytics']);
+        this.router.navigate(['/client-dashboard']);
       } 
       else {
         this.errorMessage = 'Rôle inconnu.';

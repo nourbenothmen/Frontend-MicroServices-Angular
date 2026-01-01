@@ -150,6 +150,7 @@ private updateReclamationStatus(reclamationId: number, newStatus: string) {
   marquerEnCours() {
     this.updateStatut('En cours');
     alert('Intervention marquée comme en cours !');
+    this.router.navigate(['/interventions']);
   }
 
   annuler() {

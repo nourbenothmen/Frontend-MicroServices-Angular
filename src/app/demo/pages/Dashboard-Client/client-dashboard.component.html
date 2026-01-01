@@ -1,56 +1,59 @@
-<div class="dashboard">
+<div class="client-dashboard">
 
-  <!-- Cards -->
-<div class="cards">
-  <div class="card card-total">
-    <h3>📋 Réclamations totales</h3>
-    <p>{{ stats.totalReclamations }}</p>
+  <!-- Cartes statistiques -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="icon">📋</div>
+      <h3>Réclamations totales</h3>
+      <p class="number">{{ stats.totalReclamations }}</p>
+    </div>
+    <div class="stat-card warning">
+      <div class="icon">⏳</div>
+      <h3>Réclamations en cours</h3>
+      <p class="number">{{ stats.enCours }}</p>
+    </div>
+    <div class="stat-card success">
+      <div class="icon">✅</div>
+      <h3>Réclamations terminées</h3>
+      <p class="number">{{ stats.terminees }}</p>
+    </div>
+    <div class="stat-card info">
+      <div class="icon">📦</div>
+      <h3>Articles enregistrés</h3>
+      <p class="number">{{ stats.articles }}</p>
+    </div>
   </div>
-
-  <div class="card card-encours">
-    <h3>⏳ Réclamations en cours</h3>
-    <p>{{ stats.enCours }}</p>
-  </div>
-
-  <div class="card card-terminees">
-    <h3>✅ Réclamations terminées</h3>
-    <p>{{ stats.terminees }}</p>
-  </div>
-
-  <div class="card card-articles">
-    <h3>📦 Articles enregistrés</h3>
-    <p>{{ stats.articles }}</p>
-  </div>
-</div>
 
   <!-- Réclamations récentes -->
-  <div class="recent-reclamations">
+  <div class="recent-section">
     <h2>📋 Réclamations récentes</h2>
-    <div *ngIf="loadingReclamations">Chargement...</div>
-    <div *ngIf="!loadingReclamations && recentReclamations.length === 0">Aucune réclamation récente</div>
-    <ul *ngIf="recentReclamations.length > 0">
-      <li *ngFor="let r of recentReclamations">
-        <h4>{{ r.subject }} (REC-{{ r.id | number:'3.0' }})</h4>
-        <p>
-  Status :
-  <span class="badge" [ngClass]="getStatusClass(r.status)">
-    {{ getStatusLabel(r.status) }}
-  </span>
-</p>
 
-        <p>Date: {{ r.createdAt | date:'dd/MM/yyyy' }}</p>
-        <p>Technicien: {{ r.technicienName || '—' }}</p>
-        <p>
-  Garantie :
-  <span
-    class="badge"
-    [ngClass]="r.estSousGarantie ? 'badge-success' : 'badge-danger'">
-    {{ r.estSousGarantie ? 'Sous garantie' : 'Hors garantie' }}
-  </span>
-</p>
-
-      </li>
-    </ul>
+    <div class="cards-grid">
+      <div class="reclamation-card" *ngFor="let r of recentReclamations">
+        <div class="left-border"></div>
+        <div class="content">
+          <div class="header">
+            <h4>{{ r.articleNom }} - <strong>Probléme : {{ r.problemType || 'Problème non spécifié' }}</strong></h4>
+            <span class="badge" [ngClass]="getStatusClass(r.status)">
+              {{ r.status | reclamationStatus }}
+            </span>
+          </div>
+          <div class="details">
+            <p><strong>REC-{{ r.id}}</strong></p>
+            <p>Date: {{ r.createdAt | date:'dd/MM/yyyy' }}</p>
+            <p>Technicien: {{ r.technicienNom || 'Non assigné' }}</p>
+            <p>
+              Garantie: 
+              <span class="garantie" [ngClass]="r.estSousGarantie ? 'sous' : 'hors'">
+                {{ r.estSousGarantie ? 'Sous garantie' : 'Hors garantie' }}
+              </span>
+            </p>
+            <p *ngIf="r.status === 'Terminée' && !r.estSousGarantie && r.montantTotal">
+              Montant facturé: <strong>{{ r.montantTotal }} TND</strong>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
-
 </div>

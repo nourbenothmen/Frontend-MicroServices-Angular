@@ -31,6 +31,7 @@ import { ChatMsgComponent } from './chat-msg/chat-msg.component';
   ]
 })
 export class NavRightComponent {
+    username: string = 'Utilisateur';
   // public props
   visibleUserList: boolean;
   chatMessage: boolean;
@@ -52,5 +53,19 @@ export class NavRightComponent {
   logout() {
     this.authService.logout();  // appelle la méthode du service
     this.router.navigate(['/login']); // redirige vers la page de login après déconnexion
+  }
+
+
+  ngOnInit(): void {
+    const decoded = this.authService.getDecodedToken();
+
+    if (decoded) {
+      // Selon ton JWT
+      this.username =
+        decoded.username ||
+        decoded.sub ||
+        decoded.email ||
+        'Utilisateur';
+    }
   }
 }

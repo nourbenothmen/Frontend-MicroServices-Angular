@@ -7,6 +7,7 @@ import { Intervention, InterventionPart } from '../../../../models/intervention.
 import { PdfMakeWrapper, Txt, Table, Columns, Cell } from 'pdfmake-wrapper';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-cloture-facturation',
@@ -77,33 +78,37 @@ ngOnInit(): void {
     });
   }
 
-  loadIntervention(id: number) {
+
+loadIntervention(id: number) {
   this.http.get<Intervention>(`${this.API_URL}/${id}`, { headers: this.getHeaders() })
     .subscribe({
       next: (data) => {
         this.intervention = { ...data };
-        this.intervention.DureeIntervention ??= 2;
-        this.intervention.TarifHoraire ??= 40;
-        this.intervention.MontantDeplacement ??= 15;
-        this.intervention.TauxTVA ??= 0.19;
-        this.intervention.ModePaiement ??= 'Espèces';
-        this.intervention.StatutPaiement ??= 'Payé';
 
-        this.calculateTotals();
+        // Observables pour récupérer les noms
+        const client$ = this.http.get<any>(`https://localhost:7091/apigateway/customers/${data.ClientId}`, { headers: this.getHeaders() });
+        const article$ = this.http.get<{nom: string}>(`https://localhost:7091/apigateway/articles/${data.ArticleId}`, { headers: this.getHeaders() });
 
-        // Si on est en mode impression → génère et télécharge le PDF immédiatement
-        if (this.mode === 'impression') {
-  setTimeout(() => {
-    this.genererFacturePdf();
-  }, 1000); // Temps pour que la page soit chargée
-}
+        forkJoin([client$, article$]).subscribe({
+          next: ([clientRes, articleRes]) => {
+            // Combine firstName et lastName
+            this.intervention.ClientNom = `${clientRes.firstName} ${clientRes.lastName}`;
+            this.intervention.ArticleNom = articleRes.nom;
+
+            this.calculateTotals();
+
+            if (this.mode === 'impression') {
+              setTimeout(() => this.genererFacturePdf(), 200);
+            }
+          },
+          error: (err) => console.error('Erreur récupération noms:', err)
+        });
       },
-      error: (err) => {
-        console.error('Erreur chargement intervention', err);
-        alert('Impossible de charger l\'intervention');
-      }
+      error: (err) => console.error('Erreur chargement intervention:', err)
     });
 }
+
+
 
   addPart() {
     if (!this.newPart.NomPiece || this.newPart.PrixUnitaire <= 0) {
